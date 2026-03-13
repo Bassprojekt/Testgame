@@ -8,13 +8,16 @@ export default function Pets() {
   const { state, dispatch } = useGame();
   const [selectedPet, setSelectedPet] = useState<string | null>(null);
 
+  const ownedPets = state.pets || [];
+  const availablePets = PETS.filter(p => !ownedPets.some((op: typeof PETS[0]) => op.id === p.id));
+
   const canAfford = (cost: Record<string, number>) => {
     return Object.entries(cost).every(([mat, amount]) => (state.materials[mat] || 0) >= amount);
   };
 
   const buyPet = (pet: typeof PETS[0]) => {
     if (!canAfford(pet.cost)) return;
-    if (state.pets.some(p => p.id === pet.id)) return;
+    if (ownedPets.some((op: typeof PETS[0]) => op.id === pet.id)) return;
 
     dispatch({ type: 'REMOVE_MATERIALS', materials: pet.cost });
     dispatch({ type: 'BUY_PET', pet: { ...pet, level: 1, xp: 0 } });
@@ -23,9 +26,6 @@ export default function Pets() {
   const toggleActivePet = (petId: string) => {
     dispatch({ type: 'SET_ACTIVE_PET', petId: state.activePet === petId ? null : petId });
   };
-
-  const ownedPets = state.pets;
-  const availablePets = PETS.filter(p => !ownedPets.some(op => op.id === p.id));
 
   const getEraColor = (era: string) => {
     const colors: Record<string, string> = {
