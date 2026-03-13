@@ -259,13 +259,13 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       return action.state;
     
     case 'BUY_TECH': {
-      const newTech = { ...state.techUpgrades };
+      const newTech = { ...(state.techUpgrades || {}) };
       newTech[action.upgradeId] = (newTech[action.upgradeId] || 0) + 1;
       return { ...state, techUpgrades: newTech };
     }
     
     case 'BUY_PET':
-      return { ...state, pets: [...state.pets, action.pet] };
+      return { ...state, pets: [...(state.pets || []), action.pet] };
     
     case 'SET_ACTIVE_PET':
       return { ...state, activePet: action.petId };
@@ -277,7 +277,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
       return { ...state, dungeonProgress: action.progress };
     
     case 'ADD_BATTLE_ANIMATION':
-      return { ...state, battleAnimations: [...state.battleAnimations, action.animation] };
+      return { ...state, battleAnimations: [...(state.battleAnimations || []), action.animation] };
     
     case 'CLEAR_BATTLE_ANIMATIONS':
       return { ...state, battleAnimations: [] };
