@@ -14,6 +14,8 @@ export default function Dungeon() {
   const [combatLog, setCombatLog] = useState<string[]>([]);
   const [combatAnimations, setCombatAnimations] = useState<{ type: string; text: string }[]>([]);
 
+  const currentDungeon = state.currentDungeon || 0;
+
   const getStats = () => {
     const base = calculateStats();
     const petBonus = state.pets.find(p => p.id === state.activePet);
@@ -95,7 +97,7 @@ export default function Dungeon() {
         <div className="dungeon-list">
           {DUNGEONS.map((floor, index) => {
             const unlocked = state.playerLevel >= floor.requiredLevel;
-            const completed = state.currentDungeon > index;
+            const completed = currentDungeon > index;
 
             return (
               <div key={floor.id} className={`dungeon-card ${!unlocked ? 'locked' : ''}`}>

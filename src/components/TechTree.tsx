@@ -8,6 +8,8 @@ export default function TechTree() {
   const { state, dispatch } = useGame();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
+  const techUpgrades = state.techUpgrades || {};
+
   const categories = [
     { id: 'all', name: 'Alle', icon: '🔬' },
     { id: 'combat', name: 'Kampf', icon: '⚔️' },
@@ -21,7 +23,7 @@ export default function TechTree() {
   };
 
   const buyUpgrade = (upgrade: typeof TECH[0]) => {
-    const currentLevel = state.techUpgrades[upgrade.id] || 0;
+    const currentLevel = techUpgrades[upgrade.id] || 0;
     if (currentLevel >= upgrade.maxLevel) return;
     if (!canAfford(upgrade.cost)) return;
 
@@ -80,7 +82,7 @@ export default function TechTree() {
 
       <div className="tech-grid">
         {filteredTech.map(upgrade => {
-          const currentLevel = state.techUpgrades[upgrade.id] || 0;
+          const currentLevel = techUpgrades[upgrade.id] || 0;
           const maxed = currentLevel >= upgrade.maxLevel;
           const affordable = canAfford(upgrade.cost);
           const eraColor = getEraColor(upgrade.era);
