@@ -22,6 +22,7 @@ The project has been transformed from a Next.js template into a fully functional
 - [x] **NEW: Pet system** - 7 pets with bonuses (combat, gather, special)
 - [x] **NEW: Dungeon system** - 5 dungeon floors with bosses
 - [x] **NEW: Battle animations** - Damage numbers, shake effects, attack animations
+- [x] **UI Improvements** - Glassmorphism, modern styling, better hover effects
 
 ## Current Structure
 
