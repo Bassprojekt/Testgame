@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Next.js Template",
-  description: "A minimal Next.js starter template",
+  title: "Forge Master - Idle RPG",
+  description: "Schmiede deinen Weg von der Steinzeit zur Quantenära",
 };
 
 export default function RootLayout({

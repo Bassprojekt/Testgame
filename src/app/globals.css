@@ -1,1 +1,950 @@
 @import "tailwindcss";
+
+:root {
+  --bg-primary: #1a1a2e;
+  --bg-secondary: #16213e;
+  --bg-tertiary: #0f3460;
+  --bg-card: #1f2937;
+  --text-primary: #e5e7eb;
+  --text-secondary: #9ca3af;
+  --accent-gold: #fbbf24;
+  --accent-blue: #3b82f6;
+  --accent-red: #ef4444;
+  --accent-green: #22c55e;
+  --border-color: #374151;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+  color: var(--text-primary);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+}
+
+.game-app {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header */
+.game-header {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 20px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border-color);
+}
+
+.era-display {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.era-icon {
+  font-size: 2rem;
+}
+
+.era-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  background: linear-gradient(90deg, #fbbf24, #f59e0b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.resources {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.resource {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-secondary);
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.resource .icon {
+  font-size: 1.2rem;
+}
+
+.resource .value {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--accent-gold);
+}
+
+.player-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.stat-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.stat-row .label {
+  width: 60px;
+  color: var(--text-secondary);
+}
+
+.stat-row .level {
+  width: 50px;
+  font-weight: bold;
+}
+
+.xp-bar {
+  flex: 1;
+  height: 8px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.xp-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.xp-fill.player {
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+}
+
+.xp-fill.forge {
+  background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+
+.hp-bar-container {
+  margin-top: 8px;
+}
+
+.hp-bar {
+  height: 24px;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+
+.hp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  transition: width 0.3s ease;
+}
+
+.hp-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.85rem;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+}
+
+/* Navigation */
+.game-nav {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  background: var(--bg-card);
+  padding: 8px;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
+
+.nav-tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 12px 8px;
+  background: var(--bg-secondary);
+  border: none;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.nav-tab:hover {
+  background: var(--bg-tertiary);
+}
+
+.nav-tab.active {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+}
+
+.tab-icon {
+  font-size: 1.5rem;
+}
+
+.tab-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+/* Main Content */
+.main-content {
+  flex: 1;
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  overflow-y: auto;
+}
+
+/* Forge */
+.forge-container, .inventory-container, .battle-container, .materials-container {
+  height: 100%;
+}
+
+.forge-header, .inventory-header, .battle-header, .materials-header {
+  margin-bottom: 20px;
+}
+
+.forge-header h2, .inventory-header h2, .battle-header h2, .materials-header h2 {
+  margin: 0 0 8px 0;
+  font-size: 1.8rem;
+}
+
+.forge-header p, .battle-header p {
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 12px;
+}
+
+.item-card {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+  position: relative;
+}
+
+.item-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-blue);
+}
+
+.item-card.selected {
+  border-color: var(--accent-gold);
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.3);
+}
+
+.item-card.locked {
+  opacity: 0.6;
+}
+
+.item-card.equipped {
+  border-color: var(--accent-green);
+}
+
+.item-icon {
+  font-size: 2.5rem;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.item-info h4 {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+}
+
+.item-stats {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.item-stats .attack {
+  color: var(--accent-red);
+}
+
+.item-stats .defense {
+  color: var(--accent-blue);
+}
+
+.item-era {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  margin-bottom: 4px;
+}
+
+.item-rarity {
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.lock-overlay {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  font-size: 1.2rem;
+}
+
+.equipped-badge {
+  display: inline-block;
+  background: var(--accent-green);
+  color: white;
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  border-radius: 4px;
+  margin-top: 4px;
+}
+
+/* Craft Modal */
+.craft-modal, .item-modal, .enemy-modal, .buy-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal-content {
+  background: var(--bg-card);
+  border-radius: 16px;
+  padding: 24px;
+  max-width: 400px;
+  width: 90%;
+  border: 1px solid var(--border-color);
+}
+
+.modal-content h3 {
+  margin: 0 0 16px 0;
+  font-size: 1.4rem;
+  text-align: center;
+}
+
+.materials-required {
+  margin: 16px 0;
+}
+
+.materials-required h4 {
+  margin: 0 0 8px 0;
+  color: var(--text-secondary);
+}
+
+.material-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px;
+  background: var(--bg-secondary);
+  border-radius: 4px;
+  margin-bottom: 4px;
+}
+
+.material-row.missing {
+  color: var(--accent-red);
+}
+
+.modal-stats {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.modal-stats p {
+  margin: 4px 0;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.modal-buttons button {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-craft {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+}
+
+.btn-craft:disabled {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+  cursor: not-allowed;
+}
+
+.btn-cancel {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.btn-equip {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+}
+
+.btn-buy {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+}
+
+.btn-buy:disabled {
+  background: var(--bg-secondary);
+  color: var(--text-secondary);
+}
+
+.btn-fight {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+}
+
+.btn-flee {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: white;
+}
+
+.btn-close {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.craft-result {
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 16px;
+  text-align: center;
+  font-weight: bold;
+}
+
+.craft-result.success {
+  background: rgba(34, 197, 94, 0.2);
+  color: var(--accent-green);
+  border: 1px solid var(--accent-green);
+}
+
+.crafting-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.crafting-animation {
+  text-align: center;
+}
+
+.crafting-animation .hammer {
+  font-size: 4rem;
+  animation: hammer 0.5s ease-in-out infinite;
+}
+
+.crafting-animation .fire {
+  font-size: 3rem;
+  margin-top: 16px;
+  animation: fire 0.3s ease-in-out infinite alternate;
+}
+
+.crafting-animation p {
+  margin-top: 16px;
+  font-size: 1.2rem;
+  color: var(--accent-gold);
+}
+
+@keyframes hammer {
+  0%, 100% { transform: rotate(-30deg); }
+  50% { transform: rotate(30deg); }
+}
+
+@keyframes fire {
+  from { transform: scale(1); opacity: 0.8; }
+  to { transform: scale(1.2); opacity: 1; }
+}
+
+/* Inventory */
+.current-stats {
+  display: flex;
+  gap: 24px;
+  margin-top: 12px;
+}
+
+.current-stats .stat {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--bg-secondary);
+  padding: 8px 16px;
+  border-radius: 8px;
+}
+
+.current-stats .stat-icon {
+  font-size: 1.2rem;
+}
+
+.current-stats .stat-value {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--accent-blue);
+}
+
+.current-stats .stat-label {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+.equipment-slots {
+  margin-bottom: 24px;
+}
+
+.equipment-slots h3 {
+  margin: 0 0 12px 0;
+  color: var(--text-secondary);
+}
+
+.slots-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+.equipment-slot {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  cursor: pointer;
+  border: 2px dashed var(--border-color);
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.equipment-slot:hover {
+  border-color: var(--accent-blue);
+}
+
+.equipment-slot.equipped {
+  border-style: solid;
+  border-color: var(--accent-green);
+}
+
+.slot-icon {
+  font-size: 2rem;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.equipped-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.equipped-item .item-name {
+  font-size: 0.85rem;
+  font-weight: bold;
+}
+
+.equipped-item .stat {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.slot-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+}
+
+.inventory-items h3 {
+  margin: 0 0 12px 0;
+  color: var(--text-secondary);
+}
+
+.empty-inventory {
+  text-align: center;
+  color: var(--text-secondary);
+  padding: 24px;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+}
+
+.modal-details {
+  margin-bottom: 16px;
+}
+
+.modal-details p {
+  margin: 4px 0;
+}
+
+/* Battle */
+.battle-container.fighting {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.battle-arena {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 24px;
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.player-battle, .enemy-battle {
+  text-align: center;
+}
+
+.character, .enemy-icon {
+  font-size: 4rem;
+  margin-bottom: 12px;
+}
+
+.enemy-icon {
+  font-size: 5rem;
+}
+
+.player-battle h3, .enemy-battle h3 {
+  margin: 0 0 12px 0;
+}
+
+.player-stats-battle, .enemy-stats {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.player-stats-battle span, .enemy-stats span {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.vs {
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--accent-red);
+}
+
+.battle-log {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 16px;
+  height: 150px;
+  overflow-y: auto;
+  margin-bottom: 16px;
+}
+
+.battle-log p {
+  margin: 4px 0;
+  font-size: 0.9rem;
+}
+
+.enemies-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.era-section h3 {
+  margin: 0 0 12px 0;
+  color: var(--accent-gold);
+}
+
+.enemies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.enemy-card {
+  background: var(--bg-secondary);
+  border-radius: 12px;
+  padding: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 2px solid transparent;
+}
+
+.enemy-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-red);
+}
+
+.enemy-card .enemy-icon {
+  font-size: 2.5rem;
+  display: block;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.enemy-card .enemy-info h4 {
+  margin: 0 0 8px 0;
+  font-size: 1rem;
+}
+
+.enemy-stats {
+  display: flex;
+  gap: 12px;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  flex-wrap: wrap;
+}
+
+.rewards {
+  margin-top: 8px;
+}
+
+.rewards span {
+  color: var(--accent-gold);
+  font-weight: bold;
+}
+
+.modal-enemy-icon {
+  font-size: 4rem;
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.modal-enemy-stats {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.modal-enemy-stats p {
+  margin: 4px 0;
+}
+
+.rewards-section {
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.rewards-section h4 {
+  margin: 0 0 8px 0;
+  color: var(--text-secondary);
+}
+
+.material-rewards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+}
+
+.reward-material {
+  background: var(--bg-secondary);
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+}
+
+/* Materials */
+.gold-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.2rem;
+}
+
+.gold-display .icon {
+  font-size: 1.5rem;
+}
+
+.gold-display .value {
+  font-weight: bold;
+  color: var(--accent-gold);
+}
+
+.gather-section {
+  margin-bottom: 24px;
+}
+
+.gather-section h3 {
+  margin: 0 0 8px 0;
+}
+
+.gather-section p {
+  color: var(--text-secondary);
+  margin: 0 0 12px 0;
+}
+
+.gather-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.gather-btn {
+  padding: 12px 20px;
+  background: var(--bg-secondary);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.gather-btn:hover {
+  background: var(--bg-tertiary);
+  border-color: var(--accent-gold);
+}
+
+.materials-list h3 {
+  margin: 0 0 16px 0;
+  color: var(--text-secondary);
+}
+
+.era-materials {
+  margin-bottom: 20px;
+}
+
+.era-materials h4 {
+  margin: 0 0 12px 0;
+  font-size: 1rem;
+}
+
+.materials-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 8px;
+}
+
+.material-card {
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.material-card:hover {
+  background: var(--bg-tertiary);
+}
+
+.material-icon {
+  font-size: 1.5rem;
+}
+
+.material-name {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+}
+
+.material-amount {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--accent-blue);
+}
+
+.buy-form {
+  text-align: center;
+}
+
+.amount-selector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.amount-selector button {
+  width: 40px;
+  height: 40px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.amount-selector button:hover {
+  background: var(--bg-tertiary);
+}
+
+.amount-selector span {
+  font-size: 1.5rem;
+  font-weight: bold;
+  min-width: 40px;
+  text-align: center;
+}
+
+.total-price {
+  font-size: 1.2rem;
+  color: var(--accent-gold);
+  font-weight: bold;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .slots-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .items-grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  }
+
+  .battle-arena {
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .vs {
+    transform: rotate(90deg);
+  }
+}
