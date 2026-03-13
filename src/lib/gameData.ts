@@ -144,3 +144,76 @@ export const RARITY_COLORS: Record<string, string> = {
   epic: '#8B5CF6',
   legendary: '#F59E0B',
 };
+
+export interface TechUpgrade {
+  id: string;
+  name: string;
+  nameDe: string;
+  description: string;
+  descriptionDe: string;
+  category: 'combat' | 'forge' | 'automation' | 'magic';
+  level: number;
+  cost: Record<string, number>;
+  effect: string;
+  effectValue: number;
+  maxLevel: number;
+  icon: string;
+  era: Era;
+}
+
+export const TECH_UPGRADES: TechUpgrade[] = [
+  { id: 'sharpening', name: 'Sharpening', nameDe: 'Schärfen', description: '+10% Attack', descriptionDe: '+10% Angriff', category: 'combat', level: 1, cost: { stone: 20 }, effect: 'attack', effectValue: 0.1, maxLevel: 10, icon: '🔪', era: 'stone' },
+  { id: 'hardening', name: 'Hardening', nameDe: 'Härten', description: '+10% Defense', descriptionDe: '+10% Verteidigung', category: 'combat', level: 1, cost: { stone: 20 }, effect: 'defense', effectValue: 0.1, maxLevel: 10, icon: '🛡️', era: 'stone' },
+  { id: 'blacksmith', name: 'Blacksmith', nameDe: 'Schmied', description: '+1 Forge Level', descriptionDe: '+1 Schmiedestufe', category: 'forge', level: 1, cost: { iron: 30 }, effect: 'forgeLevel', effectValue: 1, maxLevel: 5, icon: '⚒️', era: 'medieval' },
+  { id: 'automation', name: 'Automation', nameDe: 'Automatisierung', description: 'Auto-craft', descriptionDe: 'Auto-Craft', category: 'automation', level: 1, cost: { steel: 50 }, effect: 'autoCraft', effectValue: 1, maxLevel: 3, icon: '⚙️', era: 'modern' },
+  { id: 'magic_forge', name: 'Magic Forge', nameDe: 'Magische Schmiede', description: '+20% Crafting Speed', descriptionDe: '+20% Crafting-Geschw.', category: 'magic', level: 1, cost: { crystal: 30 }, effect: 'craftSpeed', effectValue: 0.2, maxLevel: 5, icon: '✨', era: 'space' },
+  { id: 'quantum_forging', name: 'Quantum Forging', nameDe: 'Quanten-Schmieden', description: '+30% Item Quality', descriptionDe: '+30% Item-Qualität', category: 'magic', level: 1, cost: { quantum_crystal: 40 }, effect: 'itemQuality', effectValue: 0.3, maxLevel: 10, icon: '⚛️', era: 'quantum' },
+  { id: 'berserker', name: 'Berserker', nameDe: 'Berserker', description: '+15% Damage', descriptionDe: '+15% Schaden', category: 'combat', level: 1, cost: { iron: 40 }, effect: 'damage', effectValue: 0.15, maxLevel: 8, icon: '💢', era: 'medieval' },
+  { id: 'tank', name: 'Tank', nameDe: 'Tank', description: '+20% HP', descriptionDe: '+20% HP', category: 'combat', level: 1, cost: { steel: 40 }, effect: 'hp', effectValue: 0.2, maxLevel: 8, icon: '❤️', era: 'medieval' },
+  { id: 'plasma_weapons', name: 'Plasma Weapons', nameDe: 'Plasmawaffen', description: '+25% Energy Damage', descriptionDe: '+25% Energieschaden', category: 'combat', level: 1, cost: { plasma: 50 }, effect: 'energyDamage', effectValue: 0.25, maxLevel: 5, icon: '🔥', era: 'modern' },
+  { id: 'quantum_computing', name: 'Quantum Computing', nameDe: 'Quantencomputing', description: '+50% All Stats', descriptionDe: '+50% Alle Werte', category: 'magic', level: 1, cost: { dark_matter: 30 }, effect: 'allStats', effectValue: 0.5, maxLevel: 3, icon: '🔮', era: 'quantum' },
+];
+
+export interface Pet {
+  id: string;
+  name: string;
+  nameDe: string;
+  type: 'combat' | 'gather' | 'special';
+  rarity: 'common' | 'rare' | 'epic' | 'legendary';
+  level: number;
+  xp: number;
+  cost: Record<string, number>;
+  bonusType: string;
+  bonusValue: number;
+  icon: string;
+  era: Era;
+}
+
+export const PETS: Pet[] = [
+  { id: 'wolf', name: 'Wolf', nameDe: 'Wolf', type: 'combat', rarity: 'common', level: 1, xp: 0, cost: { stone: 15 }, bonusType: 'attack', bonusValue: 5, icon: '🐺', era: 'stone' },
+  { id: 'bear', name: 'Bear', nameDe: 'Bär', type: 'combat', rarity: 'rare', level: 1, xp: 0, cost: { stone: 30, wood: 20 }, bonusType: 'defense', bonusValue: 10, icon: '🐻', era: 'stone' },
+  { id: 'eagle', name: 'Eagle', nameDe: 'Adler', type: 'gather', rarity: 'common', level: 1, xp: 0, cost: { wood: 25 }, bonusType: 'gather', bonusValue: 0.2, icon: '🦅', era: 'stone' },
+  { id: 'dragon_pet', name: 'Baby Dragon', nameDe: 'Baby Drache', type: 'combat', rarity: 'epic', level: 1, xp: 0, cost: { gold: 50, diamond: 10 }, bonusType: 'damage', bonusValue: 25, icon: '🐉', era: 'medieval' },
+  { id: 'robot', name: 'Helper Robot', nameDe: 'Hilfsroboter', type: 'gather', rarity: 'rare', level: 1, xp: 0, cost: { steel: 40, titanium: 20 }, bonusType: 'autoGather', bonusValue: 1, icon: '🤖', era: 'modern' },
+  { id: 'alien', name: 'Alien Pet', nameDe: 'Außerirdischer', type: 'special', rarity: 'epic', level: 1, xp: 0, cost: { crystal: 50, plasma: 30 }, bonusType: 'allStats', bonusValue: 15, icon: '👾', era: 'space' },
+  { id: 'quantum_orb', name: 'Quantum Orb', nameDe: 'Quantenkugel', type: 'special', rarity: 'legendary', level: 1, xp: 0, cost: { quantum_crystal: 40, dark_matter: 20, antimatter: 5 }, bonusType: 'legendary', bonusValue: 100, icon: '🔮', era: 'quantum' },
+];
+
+export interface DungeonFloor {
+  id: number;
+  name: string;
+  nameDe: string;
+  requiredLevel: number;
+  enemies: Enemy[];
+  boss: Enemy;
+  rewards: Record<string, number>;
+  icon: string;
+}
+
+export const DUNGEONS: DungeonFloor[] = [
+  { id: 1, name: 'Cave of Stones', nameDe: 'Höhle der Steine', requiredLevel: 1, enemies: ENEMIES.filter(e => e.era === 'stone'), boss: { id: 'dino_boss', name: 'Dino King', nameDe: 'Dino König', era: 'stone', hp: 200, attack: 30, defense: 10, goldReward: 100, materials: { stone: 30 }, icon: '🦕' }, rewards: { stone: 50 }, icon: '🪨' },
+  { id: 2, name: 'Dark Castle', nameDe: 'Dunkle Burg', requiredLevel: 10, enemies: ENEMIES.filter(e => e.era === 'medieval'), boss: { id: 'dragon_boss', name: 'Ancient Dragon', nameDe: 'Uralter Drache', era: 'medieval', hp: 800, attack: 80, defense: 30, goldReward: 500, materials: { gold: 20, diamond: 10 }, icon: '🐲' }, rewards: { gold: 100, diamond: 5 }, icon: '🏰' },
+  { id: 3, name: 'Military Base', nameDe: 'Militärbasis', requiredLevel: 20, enemies: ENEMIES.filter(e => e.era === 'modern'), boss: { id: 'mech_boss', name: 'Mega Mech', nameDe: 'Mega Mech', era: 'modern', hp: 2000, attack: 150, defense: 80, goldReward: 1500, materials: { titanium: 30, plasma: 20 }, icon: '🎮' }, rewards: { titanium: 50, plasma: 20 }, icon: '🔫' },
+  { id: 4, name: 'Alien Mothership', nameDe: 'Alien Mutter Schiff', requiredLevel: 35, enemies: ENEMIES.filter(e => e.era === 'space'), boss: { id: 'mothership', name: 'Mothership', nameDe: 'Mutterschiff', era: 'space', hp: 8000, attack: 300, defense: 200, goldReward: 5000, materials: { crystal: 50, uranium: 30 }, icon: '🛸' }, rewards: { crystal: 80, uranium: 30 }, icon: '🚀' },
+  { id: 5, name: 'Quantum Realm', nameDe: 'Quantenreich', requiredLevel: 55, enemies: ENEMIES.filter(e => e.era === 'quantum'), boss: { id: 'quantum_lord', name: 'Quantum Lord', nameDe: 'Quantenherr', era: 'quantum', hp: 25000, attack: 800, defense: 400, goldReward: 20000, materials: { quantum_crystal: 50, dark_matter: 30, antimatter: 10 }, icon: '⚛️' }, rewards: { quantum_crystal: 100, dark_matter: 50, antimatter: 20 }, icon: '🔮' },
+];

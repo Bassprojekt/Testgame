@@ -8,7 +8,9 @@ export default function Battle() {
   const { state, dispatch, calculateStats } = useGame();
   const [selectedEnemy, setSelectedEnemy] = useState<Enemy | null>(null);
   const [autoBattle, setAutoBattle] = useState(false);
+  const [battleAnimations, setBattleAnimations] = useState<{ id: number; type: string; text: string; target: 'player' | 'enemy' }[]>([]);
   const battleRef = useRef<HTMLDivElement>(null);
+  const animIdRef = useRef(0);
 
   const stats = calculateStats();
   
@@ -17,6 +19,14 @@ export default function Battle() {
     const playerEraIndex = ERAS.findIndex(e => e.id === state.currentEra);
     return eraIndex <= playerEraIndex;
   });
+
+  const addAnimation = (type: string, text: string, target: 'player' | 'enemy') => {
+    const id = ++animIdRef.current;
+    setBattleAnimations(prev => [...prev, { id, type, text, target }]);
+    setTimeout(() => {
+      setBattleAnimations(prev => prev.filter(a => a.id !== id));
+    }, 600);
+  };
 
   const startBattle = (enemy: Enemy) => {
     dispatch({ type: 'START_BATTLE', enemy });
@@ -32,6 +42,7 @@ export default function Battle() {
 
       dispatch({ type: 'DAMAGE_ENEMY', damage: Math.floor(playerDamage) });
       dispatch({ type: 'ADD_BATTLE_LOG', message: `Du dealst ${Math.floor(playerDamage)} Schaden!` });
+      addAnimation('attack', `-${Math.floor(playerDamage)}`, 'enemy');
 
       if (state.enemyHp - playerDamage <= 0) {
         dispatch({ type: 'ADD_BATTLE_LOG', message: `🎉 Du hast gewonnen! +${state.currentEnemy!.goldReward} Gold` });
@@ -42,17 +53,18 @@ export default function Battle() {
       setTimeout(() => {
         dispatch({ type: 'DAMAGE_PLAYER', damage: Math.floor(enemyDamage) });
         dispatch({ type: 'ADD_BATTLE_LOG', message: `Gegner dealt ${Math.floor(enemyDamage)} Schaden!` });
+        addAnimation('damage', `-${Math.floor(enemyDamage)}`, 'player');
 
         if (state.playerHp - enemyDamage <= 0) {
           dispatch({ type: 'ADD_BATTLE_LOG', message: '💀 Du wurdest besiegt!' });
           dispatch({ type: 'END_BATTLE', won: false });
         }
-      }, 500);
+      }, 400);
 
-    }, 1000);
+    }, 1200);
 
     return () => clearInterval(interval);
-  }, [state.isFighting, state.currentEnemy]);
+  }, [state.isFighting, state.currentEnemy, state.enemyHp, state.playerHp]);
 
   useEffect(() => {
     if (battleRef.current) {
@@ -62,12 +74,19 @@ export default function Battle() {
 
   if (state.isFighting && state.currentEnemy) {
     const enemyMaxHp = state.currentEnemy.hp;
+    const playerAnimations = battleAnimations.filter(a => a.target === 'player');
+    const enemyAnimations = battleAnimations.filter(a => a.target === 'enemy');
     
     return (
       <div className="battle-container fighting">
         <div className="battle-arena">
           <div className="player-battle">
-            <div className="character">🧙‍♂️</div>
+            <div className={`character ${playerAnimations.length > 0 && playerAnimations[0].type === 'damage' ? 'shake' : ''}`}>
+              🧙‍♂️
+              {playerAnimations.map(anim => (
+                <span key={anim.id} className="damage-number hit-player">{anim.text}</span>
+              ))}
+            </div>
             <div className="hp-bar">
               <div 
                 className="hp-fill" 
@@ -84,7 +103,12 @@ export default function Battle() {
           <div className="vs">VS</div>
 
           <div className="enemy-battle">
-            <div className="enemy-icon">{state.currentEnemy.icon}</div>
+            <div className={`enemy-icon ${enemyAnimations.length > 0 && enemyAnimations[0].type === 'attack' ? 'attack-anim' : ''}`}>
+              {state.currentEnemy.icon}
+              {enemyAnimations.map(anim => (
+                <span key={anim.id} className="damage-number hit-enemy">{anim.text}</span>
+              ))}
+            </div>
             <h3>{state.currentEnemy.nameDe}</h3>
             <div className="hp-bar enemy">
               <div 

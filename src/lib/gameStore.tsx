@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useReducer, useEffect, ReactNode } from 'react';
-import { Era, Item, Enemy, ERAS, ITEMS, ENEMIES, MATERIALS } from './gameData';
+import { Era, Item, Enemy, ERAS, ITEMS, ENEMIES, MATERIALS, TechUpgrade, Pet, DungeonFloor, DUNGEONS } from './gameData';
 
 export interface PlayerEquipment {
   weapon: Item | null;
@@ -26,6 +26,12 @@ interface GameState {
   battleLog: string[];
   playerHp: number;
   maxPlayerHp: number;
+  techUpgrades: Record<string, number>;
+  pets: Pet[];
+  activePet: string | null;
+  currentDungeon: number;
+  dungeonProgress: number;
+  battleAnimations: { type: 'attack' | 'damage' | 'heal' | 'special'; target: 'player' | 'enemy'; value?: number }[];
 }
 
 type GameAction =
@@ -44,7 +50,14 @@ type GameAction =
   | { type: 'END_BATTLE'; won: boolean }
   | { type: 'ADD_BATTLE_LOG'; message: string }
   | { type: 'LOAD_SAVE'; state: GameState }
-  | { type: 'UPDATE_PLAYER_HP'; hp: number };
+  | { type: 'UPDATE_PLAYER_HP'; hp: number }
+  | { type: 'BUY_TECH'; upgradeId: string }
+  | { type: 'BUY_PET'; pet: Pet }
+  | { type: 'SET_ACTIVE_PET'; petId: string | null }
+  | { type: 'START_DUNGEON'; floor: number }
+  | { type: 'DUNGEON_PROGRESS'; progress: number }
+  | { type: 'ADD_BATTLE_ANIMATION'; animation: { type: 'attack' | 'damage' | 'heal' | 'special'; target: 'player' | 'enemy'; value?: number } }
+  | { type: 'CLEAR_BATTLE_ANIMATIONS' };
 
 const initialState: GameState = {
   gold: 100,
@@ -70,6 +83,12 @@ const initialState: GameState = {
   battleLog: [],
   playerHp: 100,
   maxPlayerHp: 100,
+  techUpgrades: {},
+  pets: [],
+  activePet: null,
+  currentDungeon: 0,
+  dungeonProgress: 0,
+  battleAnimations: [],
 };
 
 function calculatePlayerStats(state: GameState) {
@@ -238,6 +257,30 @@ function gameReducer(state: GameState, action: GameAction): GameState {
     
     case 'LOAD_SAVE':
       return action.state;
+    
+    case 'BUY_TECH': {
+      const newTech = { ...state.techUpgrades };
+      newTech[action.upgradeId] = (newTech[action.upgradeId] || 0) + 1;
+      return { ...state, techUpgrades: newTech };
+    }
+    
+    case 'BUY_PET':
+      return { ...state, pets: [...state.pets, action.pet] };
+    
+    case 'SET_ACTIVE_PET':
+      return { ...state, activePet: action.petId };
+    
+    case 'START_DUNGEON':
+      return { ...state, currentDungeon: action.floor, dungeonProgress: 0, isFighting: true };
+    
+    case 'DUNGEON_PROGRESS':
+      return { ...state, dungeonProgress: action.progress };
+    
+    case 'ADD_BATTLE_ANIMATION':
+      return { ...state, battleAnimations: [...state.battleAnimations, action.animation] };
+    
+    case 'CLEAR_BATTLE_ANIMATIONS':
+      return { ...state, battleAnimations: [] };
     
     default:
       return state;

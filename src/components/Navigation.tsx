@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-export type TabType = 'forge' | 'inventory' | 'battle' | 'materials';
+export type TabType = 'forge' | 'inventory' | 'battle' | 'materials' | 'techtree' | 'pets' | 'dungeon';
 
 interface NavigationProps {
   activeTab: TabType;
@@ -13,6 +13,9 @@ const tabs: { id: TabType; label: string; icon: string }[] = [
   { id: 'forge', label: 'Schmiede', icon: '⚒️' },
   { id: 'inventory', label: 'Inventar', icon: '🎒' },
   { id: 'battle', label: 'Kampf', icon: '⚔️' },
+  { id: 'dungeon', label: 'Dungeon', icon: '🏰' },
+  { id: 'pets', label: 'Pets', icon: '🐾' },
+  { id: 'techtree', label: 'Tech', icon: '🔬' },
   { id: 'materials', label: 'Material', icon: '📦' },
 ];
 

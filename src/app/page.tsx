@@ -8,6 +8,9 @@ import Forge from '@/components/Forge';
 import Inventory from '@/components/Inventory';
 import Battle from '@/components/Battle';
 import Materials from '@/components/Materials';
+import TechTree from '@/components/TechTree';
+import Pets from '@/components/Pets';
+import Dungeon from '@/components/Dungeon';
 
 function GameContent() {
   const [activeTab, setActiveTab] = useState<TabType>('forge');
@@ -21,6 +24,9 @@ function GameContent() {
         {activeTab === 'inventory' && <Inventory />}
         {activeTab === 'battle' && <Battle />}
         {activeTab === 'materials' && <Materials />}
+        {activeTab === 'techtree' && <TechTree />}
+        {activeTab === 'pets' && <Pets />}
+        {activeTab === 'dungeon' && <Dungeon />}
       </main>
     </div>
   );
