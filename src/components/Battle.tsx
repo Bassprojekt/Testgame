@@ -142,9 +142,12 @@ export default function Battle() {
 
   return (
     <div className="battle-container">
-      <div className="battle-header">
-        <h2>⚔️ Kampf</h2>
-        <p>Wähle einen Gegner zum Kämpfen</p>
+      <div className="section-header">
+        <div className="section-icon battle-icon">⚔️</div>
+        <div className="section-text">
+          <h2 className="section-title">Kampf</h2>
+          <p>Wähle einen Gegner zum Kämpfen</p>
+        </div>
       </div>
 
       <div className="enemies-section">
@@ -158,24 +161,28 @@ export default function Battle() {
           
           return (
             <div key={era.id} className="era-section">
-              <h3>{era.icon} {era.nameDe}</h3>
-              <div className="enemies-grid">
+              <div className="era-badge">
+                <span className="era-icon">{era.icon}</span>
+                <span className="era-name">{era.nameDe}</span>
+              </div>
+              <div className="enemies-grid modern">
                 {eraEnemies.map(enemy => (
                   <div 
                     key={enemy.id} 
-                    className="enemy-card"
+                    className="enemy-card modern"
                     onClick={() => setSelectedEnemy(enemy)}
                   >
+                    <div className="enemy-glow" />
                     <div className="enemy-icon">{enemy.icon}</div>
                     <div className="enemy-info">
                       <h4>{enemy.nameDe}</h4>
                       <div className="enemy-stats">
-                        <span>❤️ {enemy.hp}</span>
-                        <span>⚔️ {enemy.attack}</span>
-                        <span>🛡️ {enemy.defense}</span>
+                        <span className="stat"><span className="stat-icon">❤️</span> {enemy.hp}</span>
+                        <span className="stat"><span className="stat-icon">⚔️</span> {enemy.attack}</span>
+                        <span className="stat"><span className="stat-icon">🛡️</span> {enemy.defense}</span>
                       </div>
-                      <div className="rewards">
-                        <span>💰 {enemy.goldReward}</span>
+                      <div className="enemy-reward">
+                        <span className="gold">💰 {enemy.goldReward}</span>
                       </div>
                     </div>
                   </div>
@@ -188,17 +195,17 @@ export default function Battle() {
 
       {selectedEnemy && (
         <div className="enemy-modal" onClick={() => setSelectedEnemy(null)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()}>
+          <div className="modal-content modern" onClick={e => e.stopPropagation()}>
             <div className="modal-enemy-icon">{selectedEnemy.icon}</div>
             <h3>{selectedEnemy.nameDe}</h3>
             <div className="modal-enemy-stats">
-              <p>❤️ HP: {selectedEnemy.hp}</p>
-              <p>⚔️ Angriff: {selectedEnemy.attack}</p>
-              <p>🛡️ Verteidigung: {selectedEnemy.defense}</p>
+              <div className="stat-item"><span className="stat-icon">❤️</span> HP: <strong>{selectedEnemy.hp}</strong></div>
+              <div className="stat-item"><span className="stat-icon">⚔️</span> Angriff: <strong>{selectedEnemy.attack}</strong></div>
+              <div className="stat-item"><span className="stat-icon">🛡️</span> Verteidigung: <strong>{selectedEnemy.defense}</strong></div>
             </div>
             <div className="rewards-section">
-              <h4>Belohnung:</h4>
-              <p>💰 {selectedEnemy.goldReward} Gold</p>
+              <h4><span className="reward-icon">💰</span> Belohnung</h4>
+              <p className="gold-amount">{selectedEnemy.goldReward} Gold</p>
               <div className="material-rewards">
                 {Object.entries(selectedEnemy.materials).map(([mat, amount]) => (
                   <span key={mat} className="reward-material">{mat}: {amount}</span>
@@ -207,12 +214,13 @@ export default function Battle() {
             </div>
             <div className="modal-buttons">
               <button 
-                className="btn-fight"
+                className="btn-fight modern"
                 onClick={() => startBattle(selectedEnemy)}
               >
+                <span className="btn-icon">⚔️</span>
                 Kämpfen!
               </button>
-              <button className="btn-cancel" onClick={() => setSelectedEnemy(null)}>
+              <button className="btn-cancel modern" onClick={() => setSelectedEnemy(null)}>
                 Abbrechen
               </button>
             </div>

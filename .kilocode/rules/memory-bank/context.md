@@ -23,6 +23,8 @@ The project has been transformed from a Next.js template into a fully functional
 - [x] **NEW: Dungeon system** - 5 dungeon floors with bosses
 - [x] **NEW: Battle animations** - Damage numbers, shake effects, attack animations
 - [x] **UI Improvements** - Glassmorphism, modern styling, better hover effects
+- [x] **Modern Forge UI** - Section headers, toast notifications, improved cards
+- [x] **Modern Battle UI** - Era badges, modern enemy cards, animated modals
 
 ## Current Structure
 
