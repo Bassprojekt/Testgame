@@ -1521,8 +1521,6 @@ body {
 .btn-fight .btn-icon {
   font-size: 1.3rem;
 }
-  color: var(--accent-gold);
-}
 
 .enemies-grid {
   display: grid;
